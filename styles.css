@@ -553,6 +553,135 @@ body {
 }
 
 /* ============================================
+   List View (for CCS Office)
+   ============================================ */
+.asset-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: var(--spacing-md);
+}
+
+.asset-list-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: white;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    min-height: 80px;
+}
+
+.asset-list-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.asset-list-item.selected {
+    border-color: var(--primary-color);
+    background: #E3F2FD;
+}
+
+.asset-list-item.batch-mode {
+    padding-right: 56px;
+}
+
+.asset-list-item .selection-checkbox {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--primary-color);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.asset-list-item.batch-mode .selection-checkbox {
+    display: flex;
+}
+
+.asset-list-item.selected .selection-checkbox::after {
+    content: '✓';
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.list-item-icon {
+    font-size: 48px;
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F5F5F5;
+    border-radius: 8px;
+}
+
+.list-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.list-item-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.list-item-details {
+    font-size: 14px;
+    color: #666666;
+}
+
+.list-item-borrow {
+    font-size: 14px;
+    color: #1976D2;
+    font-weight: 500;
+}
+
+.list-item-status {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+/* List Item Status Colors */
+.asset-list-item.status-good {
+    border-left: 6px solid var(--status-good);
+}
+
+.asset-list-item.status-warning {
+    border-left: 6px solid var(--status-warning);
+}
+
+.asset-list-item.status-defective {
+    border-left: 6px solid var(--status-defective);
+}
+
+.asset-list-item.status-borrowed {
+    border-left: 6px solid var(--status-borrowed);
+}
+
+.asset-list-item.overdue {
+    animation: flashYellow 1.5s ease-in-out infinite;
+    border-color: var(--warning-color);
+}
+
+/* ============================================
    Batch Actions Panel
    ============================================ */
 .batch-actions-panel {

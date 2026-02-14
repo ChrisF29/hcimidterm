@@ -259,9 +259,17 @@ function renderFloorPlan() {
         
         gridContainer.innerHTML = '';
         
-        // Determine number of rows based on current lab (5 rows, 8 PCs per row, 2 columns of 4)
+        // CCS Office uses list view instead of grid
+        if (AppState.currentLab === 'CCS Office') {
+            renderListView(gridContainer);
+            updateLabCounts();
+            return;
+        }
+        
+        // Determine layout for Room 209 and Room 210
         const maxRows = 5;
         const positionsPerColumn = 4;
+        const hasAisle = true;
         
         // Create rows dynamically
         for (let rowNum = 1; rowNum <= maxRows; rowNum++) {
@@ -293,10 +301,10 @@ function renderFloorPlan() {
                 return (locA?.position || 0) - (locB?.position || 0);
             });
             
-            // Add assets to row with aisle separator between columns
+            // Add assets to row with optional aisle separator between columns
             rowAssets.forEach((asset, index) => {
                 // Insert aisle separator between column 1 (positions 1-4) and column 2 (positions 5-8)
-                if (index === positionsPerColumn) {
+                if (hasAisle && index === positionsPerColumn) {
                     const aisle = document.createElement('div');
                     aisle.className = 'row-aisle';
                     rowItems.appendChild(aisle);
@@ -335,8 +343,16 @@ function switchLab(labName) {
     
     // Update current lab display
     const currentLabName = document.getElementById('currentLabName');
+    const currentLabSubtitle = document.getElementById('currentLabSubtitle');
     if (currentLabName) {
         currentLabName.textContent = labName;
+    }
+    if (currentLabSubtitle) {
+        if (labName === 'CCS Office') {
+            currentLabSubtitle.textContent = 'Drawing Tablet Inventory';
+        } else {
+            currentLabSubtitle.textContent = '5 Rows × 8 Positions';
+        }
     }
     
     // Re-render floor plan for new lab
@@ -347,6 +363,7 @@ function updateLabCounts() {
     // Count assets in each lab
     let count209 = 0;
     let count210 = 0;
+    let countCCS = 0;
     
     AppState.assets.forEach(asset => {
         const location = AppState.locations.find(loc => loc.id === asset.locationId);
@@ -355,6 +372,8 @@ function updateLabCounts() {
                 count209++;
             } else if (location.lab === 'Room 210') {
                 count210++;
+            } else if (location.lab === 'CCS Office') {
+                countCCS++;
             }
         }
     });
@@ -362,6 +381,7 @@ function updateLabCounts() {
     // Update count displays
     const count209Element = document.getElementById('count209');
     const count210Element = document.getElementById('count210');
+    const countCCSElement = document.getElementById('countCCS');
     
     if (count209Element) {
         count209Element.textContent = `${count209} items`;
@@ -369,11 +389,156 @@ function updateLabCounts() {
     if (count210Element) {
         count210Element.textContent = `${count210} items`;
     }
+    if (countCCSElement) {
+        countCCSElement.textContent = `${countCCS} items`;
+    }
 }
 
 // ============================================
 // Floor Item Creation
 // ============================================
+
+// List View Rendering (for CCS Office)
+// ============================================
+function renderListView(container) {
+    // Get all assets for current lab
+    const labAssets = AppState.assets.filter(asset => {
+        const location = AppState.locations.find(loc => loc.id === asset.locationId);
+        return location && location.lab === AppState.currentLab;
+    });
+    
+    // Sort by location
+    labAssets.sort((a, b) => {
+        const locA = AppState.locations.find(loc => loc.id === a.locationId);
+        const locB = AppState.locations.find(loc => loc.id === b.locationId);
+        return (locA?.id || 0) - (locB?.id || 0);
+    });
+    
+    // Create list container
+    const listContainer = document.createElement('div');
+    listContainer.className = 'asset-list-container';
+    
+    // Add each asset as a list item
+    labAssets.forEach(asset => {
+        if (shouldShowAsset(asset)) {
+            listContainer.appendChild(createListItem(asset));
+        }
+    });
+    
+    container.appendChild(listContainer);
+}
+
+function createListItem(asset) {
+    const category = AppState.categories.find(c => c.id === asset.categoryId);
+    
+    const item = document.createElement('div');
+    item.className = `asset-list-item status-${asset.status}`;
+    item.dataset.assetId = asset.id;
+    
+    // Check if overdue
+    if (asset.status === 'borrowed') {
+        const transaction = AppState.transactions.find(t => 
+            t.assetId === asset.id && t.status === 'active'
+        );
+        if (transaction && isOverdue(transaction.expectedReturn)) {
+            item.classList.add('overdue');
+        }
+    }
+    
+    // Selection checkbox (for batch mode)
+    const checkbox = document.createElement('div');
+    checkbox.className = 'selection-checkbox';
+    item.appendChild(checkbox);
+    
+    // Icon
+    const icon = document.createElement('div');
+    icon.className = 'list-item-icon';
+    icon.textContent = category?.icon || '📦';
+    item.appendChild(icon);
+    
+    // Info container
+    const info = document.createElement('div');
+    info.className = 'list-item-info';
+    
+    // Name
+    const name = document.createElement('div');
+    name.className = 'list-item-name';
+    name.textContent = asset.name;
+    info.appendChild(name);
+    
+    // Details (Serial Number, Brand, Status)
+    const details = document.createElement('div');
+    details.className = 'list-item-details';
+    
+    const serialSpan = document.createElement('span');
+    serialSpan.textContent = `SN: ${asset.serialNumber}`;
+    details.appendChild(serialSpan);
+    
+    if (asset.brand) {
+        const brandSpan = document.createElement('span');
+        brandSpan.textContent = ` • ${asset.brand}`;
+        details.appendChild(brandSpan);
+    }
+    
+    info.appendChild(details);
+    
+    // Borrower info if borrowed
+    if (asset.status === 'borrowed') {
+        const transaction = AppState.transactions.find(t => 
+            t.assetId === asset.id && t.status === 'active'
+        );
+        if (transaction) {
+            const student = AppState.students.find(s => s.id === transaction.studentId);
+            if (student) {
+                const borrowInfo = document.createElement('div');
+                borrowInfo.className = 'list-item-borrow';
+                borrowInfo.textContent = `📤 Borrowed by: ${student.name}`;
+                
+                const returnDate = new Date(transaction.expectedReturn);
+                const returnSpan = document.createElement('span');
+                returnSpan.textContent = ` (Return: ${returnDate.toLocaleDateString()})`;
+                borrowInfo.appendChild(returnSpan);
+                
+                info.appendChild(borrowInfo);
+            }
+        }
+    }
+    
+    item.appendChild(info);
+    
+    // Status badge
+    const statusBadge = document.createElement('div');
+    statusBadge.className = `list-item-status status-${asset.status}`;
+    const statusIcons = {
+        'good': '✅',
+        'warning': '⚠️',
+        'defective': '❌',
+        'borrowed': '📤'
+    };
+    statusBadge.textContent = statusIcons[asset.status] || '❓';
+    item.appendChild(statusBadge);
+    
+    // Event listener
+    item.addEventListener('click', (e) => {
+        if (AppState.isBatchMode) {
+            toggleItemSelection(asset.id);
+        } else {
+            showItemDetails(asset.id);
+        }
+    });
+    
+    // Check if selected
+    if (AppState.selectedAssets.includes(asset.id)) {
+        item.classList.add('selected');
+    }
+    
+    // Add batch mode class if active
+    if (AppState.isBatchMode) {
+        item.classList.add('batch-mode');
+    }
+    
+    return item;
+}
 
 function createFloorItem(asset) {
     const div = document.createElement('div');
@@ -539,8 +704,8 @@ function toggleBatchMode() {
         btn.classList.add('active');
         if (panel) panel.style.display = 'block';
         
-        // Add batch-mode class to all items
-        document.querySelectorAll('.floor-item').forEach(item => {
+        // Add batch-mode class to all items (floor items and list items)
+        document.querySelectorAll('.floor-item, .asset-list-item').forEach(item => {
             item.classList.add('batch-mode');
         });
     } else {
@@ -552,7 +717,7 @@ function toggleBatchMode() {
         clearSelection();
         
         // Remove batch-mode class
-        document.querySelectorAll('.floor-item').forEach(item => {
+        document.querySelectorAll('.floor-item, .asset-list-item').forEach(item => {
             item.classList.remove('batch-mode');
         });
     }
@@ -571,8 +736,8 @@ function toggleItemSelection(assetId) {
 }
 
 function updateBatchUI() {
-    // Update item visual states
-    document.querySelectorAll('.floor-item').forEach(item => {
+    // Update item visual states (floor items and list items)
+    document.querySelectorAll('.floor-item, .asset-list-item').forEach(item => {
         const assetId = parseInt(item.dataset.assetId);
         if (AppState.selectedAssets.includes(assetId)) {
             item.classList.add('selected');
@@ -590,7 +755,7 @@ function updateBatchUI() {
 }
 
 function selectAllVisible() {
-    const visibleItems = document.querySelectorAll('.floor-item:not([style*="display: none"])');
+    const visibleItems = document.querySelectorAll('.floor-item:not([style*="display: none"]), .asset-list-item:not([style*="display: none"])');
     
     visibleItems.forEach(item => {
         const assetId = parseInt(item.dataset.assetId);

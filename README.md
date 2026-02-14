@@ -22,9 +22,11 @@ A comprehensive web-based inventory management system optimized for tablet use, 
 ### 🎯 Core Functionality
 
 1. **Visual Floor Plan**
-   - Interactive map for 2 laboratories (Room 209 and Room 210)
-   - Each lab: 5 rows × 8 positions (2 columns of 4) = 40 PCs
-   - Tab switching between laboratories
+   - Interactive map for 3 locations:
+     - Room 209: 5 rows × 8 positions (2 columns of 4) = 40 PCs (grid view)
+     - Room 210: 5 rows × 8 positions (2 columns of 4) = 40 PCs (grid view)
+     - CCS Office: 10 Drawing Tablets (list view with detailed information)
+   - Tab switching between locations
    - Color-coded status indicators:
      - ✅ Good (Green)
      - ⚠️ Warning (Yellow)
@@ -154,8 +156,8 @@ The system includes 6 main tables:
 
 | Table | Purpose |
 |-------|---------|
-| `categories` | Equipment categories (PC, Monitor, Mouse, etc.) |
-| `locations` | Physical locations (Room 209 & 210, 5 rows × 8 positions each) |
+| `categories` | Equipment categories (PC, Monitor, Mouse, Drawing Tablet, etc.) |
+| `locations` | Physical locations (Room 209, Room 210, CCS Office) |
 | `students` | Student/borrower information |
 | `assets` | Main inventory table for all equipment |
 | `transactions` | Borrowing and return history |
@@ -164,12 +166,20 @@ The system includes 6 main tables:
 ### Sample Data
 
 The schema includes sample data:
-- 10 equipment categories
-- 80 locations (Room 209: 5 rows × 8 positions = 40, Room 210: 5 rows × 8 positions = 40)
+- 11 equipment categories (PC, Monitor, Keyboard, Mouse, Headset, Webcam, Printer, RAM, SSD, Power Supply, Drawing Tablet)
+- 90 locations:
+  - Room 209: 5 rows × 8 positions = 40
+  - Room 210: 5 rows × 8 positions = 40
+  - CCS Office: 2 rows × 5 positions = 10
 - 3 sample students
-- 81 sample assets (40 PCs in Room 209, 40 PCs in Room 210, 1 consumable item)
+- 91 sample assets:
+  - 40 PCs in Room 209
+  - 40 PCs in Room 210
+  - 10 Drawing Tablets in CCS Office (for faculty borrowing)
+  - 1 consumable item
 - Sample transactions and repair logs
   - 1 borrowed PC (Room 210)
+  - 2 borrowed Drawing Tablets (CCS Office)
   - 2 defective PCs with repair logs
 
 ### Useful Views

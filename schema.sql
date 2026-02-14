@@ -178,10 +178,12 @@ INSERT INTO categories (category_name, icon) VALUES
 ('Headset', '🎧'),
 ('Webcam', '📷'),
 ('External HDD', '💾'),
-('Power Supply', '⚡');
+('Power Supply', '⚡'),
+('Drawing Tablet', '🎨');
 
 -- Insert Locations (Room 209: 5 Rows x 8 Positions = 40 PCs, 2 columns of 4)
 -- Insert Locations (Room 210: 5 Rows x 8 Positions = 40 PCs, 2 columns of 4)
+-- Insert Locations (CCS Office: 2 Rows x 5 Positions = 10 Drawing Tablets)
 INSERT INTO locations (lab_name, row_number, position_number, coordinates_x, coordinates_y) VALUES
 -- Room 209 (IDs 1-40)
 ('Room 209', 1, 1, 100, 100), ('Room 209', 1, 2, 200, 100), ('Room 209', 1, 3, 300, 100), ('Room 209', 1, 4, 400, 100), ('Room 209', 1, 5, 550, 100), ('Room 209', 1, 6, 650, 100), ('Room 209', 1, 7, 750, 100), ('Room 209', 1, 8, 850, 100),
@@ -194,7 +196,10 @@ INSERT INTO locations (lab_name, row_number, position_number, coordinates_x, coo
 ('Room 210', 2, 1, 100, 200), ('Room 210', 2, 2, 200, 200), ('Room 210', 2, 3, 300, 200), ('Room 210', 2, 4, 400, 200), ('Room 210', 2, 5, 550, 200), ('Room 210', 2, 6, 650, 200), ('Room 210', 2, 7, 750, 200), ('Room 210', 2, 8, 850, 200),
 ('Room 210', 3, 1, 100, 300), ('Room 210', 3, 2, 200, 300), ('Room 210', 3, 3, 300, 300), ('Room 210', 3, 4, 400, 300), ('Room 210', 3, 5, 550, 300), ('Room 210', 3, 6, 650, 300), ('Room 210', 3, 7, 750, 300), ('Room 210', 3, 8, 850, 300),
 ('Room 210', 4, 1, 100, 400), ('Room 210', 4, 2, 200, 400), ('Room 210', 4, 3, 300, 400), ('Room 210', 4, 4, 400, 400), ('Room 210', 4, 5, 550, 400), ('Room 210', 4, 6, 650, 400), ('Room 210', 4, 7, 750, 400), ('Room 210', 4, 8, 850, 400),
-('Room 210', 5, 1, 100, 500), ('Room 210', 5, 2, 200, 500), ('Room 210', 5, 3, 300, 500), ('Room 210', 5, 4, 400, 500), ('Room 210', 5, 5, 550, 500), ('Room 210', 5, 6, 650, 500), ('Room 210', 5, 7, 750, 500), ('Room 210', 5, 8, 850, 500);
+('Room 210', 5, 1, 100, 500), ('Room 210', 5, 2, 200, 500), ('Room 210', 5, 3, 300, 500), ('Room 210', 5, 4, 400, 500), ('Room 210', 5, 5, 550, 500), ('Room 210', 5, 6, 650, 500), ('Room 210', 5, 7, 750, 500), ('Room 210', 5, 8, 850, 500),
+-- CCS Office (IDs 81-90)
+('CCS Office', 1, 1, 100, 100), ('CCS Office', 1, 2, 200, 100), ('CCS Office', 1, 3, 300, 100), ('CCS Office', 1, 4, 400, 100), ('CCS Office', 1, 5, 500, 100),
+('CCS Office', 2, 1, 100, 200), ('CCS Office', 2, 2, 200, 200), ('CCS Office', 2, 3, 300, 200), ('CCS Office', 2, 4, 400, 200), ('CCS Office', 2, 5, 500, 200);
 
 -- Insert sample students
 INSERT INTO students (student_name, student_number, email, department) VALUES
@@ -286,6 +291,17 @@ INSERT INTO assets (serial_number, asset_name, category_id, location_id, status,
 ('SN-PC-210-038', 'Desktop PC 210-R5P6', 1, 78, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3B:38', '192.168.210.38', 'Intel i5, 8GB RAM, 256GB SSD'),
 ('SN-PC-210-039', 'Desktop PC 210-R5P7', 1, 79, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:39', '192.168.210.39', 'Intel i7, 16GB RAM, 512GB SSD'),
 ('SN-PC-210-040', 'Desktop PC 210-R5P8', 1, 80, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3B:40', '192.168.210.40', 'Intel i7, 16GB RAM, 512GB SSD'),
+-- CCS Office Assets (10 Drawing Tablets - Location IDs 81-90)
+('SN-TABLET-001', 'Drawing Tablet CCS-R1P1', 11, 81, 'good', 'Wacom', 'Intuos Pro', NULL, NULL, 'Medium size, 8192 pressure levels'),
+('SN-TABLET-002', 'Drawing Tablet CCS-R1P2', 11, 82, 'good', 'Wacom', 'Intuos Pro', NULL, NULL, 'Medium size, 8192 pressure levels'),
+('SN-TABLET-003', 'Drawing Tablet CCS-R1P3', 11, 83, 'borrowed', 'Wacom', 'Intuos Pro', NULL, NULL, 'Medium size, 8192 pressure levels'),
+('SN-TABLET-004', 'Drawing Tablet CCS-R1P4', 11, 84, 'good', 'XP-Pen', 'Artist 15.6', NULL, NULL, 'Display tablet, Full HD'),
+('SN-TABLET-005', 'Drawing Tablet CCS-R1P5', 11, 85, 'borrowed', 'XP-Pen', 'Artist 15.6', NULL, NULL, 'Display tablet, Full HD'),
+('SN-TABLET-006', 'Drawing Tablet CCS-R2P1', 11, 86, 'good', 'Wacom', 'Cintiq 16', NULL, NULL, 'Display tablet, 1920x1080'),
+('SN-TABLET-007', 'Drawing Tablet CCS-R2P2', 11, 87, 'good', 'Wacom', 'Intuos Pro', NULL, NULL, 'Medium size, 8192 pressure levels'),
+('SN-TABLET-008', 'Drawing Tablet CCS-R2P3', 11, 88, 'warning', 'XP-Pen', 'Artist 12', NULL, NULL, 'Compact display tablet'),
+('SN-TABLET-009', 'Drawing Tablet CCS-R2P4', 11, 89, 'good', 'Wacom', 'Intuos Pro', NULL, NULL, 'Medium size, 8192 pressure levels'),
+('SN-TABLET-010', 'Drawing Tablet CCS-R2P5', 11, 90, 'good', 'Huion', 'Kamvas Pro 13', NULL, NULL, 'Display tablet, 1920x1080'),
 -- Consumables (no specific location)
 ('SN-MOUSE-BULK', 'Logitech Mice - Bulk', 4, NULL, 'good', 'Logitech', 'M170', NULL, NULL, 'Wireless Optical Mouse');
 
