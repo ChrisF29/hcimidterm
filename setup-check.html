@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation Check - IT Inventory System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .check-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: #f5f5f5;
+            transition: all 0.3s ease;
+        }
+        
+        .check-item.success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .check-item.error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .check-item.warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .check-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+        
+        .check-content {
+            flex: 1;
+        }
+        
+        .check-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .check-message {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .info-box h3 {
+            color: #1976D2;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .info-box ul {
+            margin-left: 20px;
+        }
+        
+        .info-box li {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2196F3;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ IT Inventory System - Installation Check</h1>
+        <p class="subtitle">Verifying system requirements and configuration...</p>
+        
+        <div id="checks">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Running diagnostics...</p>
+            </div>
+        </div>
+        
+        <div class="actions" id="actions" style="display: none;">
+            <a href="index.html" class="btn btn-primary">✅ Open Dashboard</a>
+            <a href="api.php?action=ping" class="btn btn-secondary" target="_blank">🔌 Test API</a>
+            <a href="http://localhost/phpmyadmin" class="btn btn-secondary" target="_blank">🗄️ phpMyAdmin</a>
+        </div>
+        
+        <div class="info-box" id="nextSteps" style="display: none;">
+            <h3>📋 Next Steps:</h3>
+            <ul id="stepsList"></ul>
+        </div>
+    </div>
+    
+    <script>
+        const checks = {
+            php: { title: 'PHP Server', icon: '🐘', tested: false },
+            api: { title: 'API Endpoint', icon: '🔌', tested: false },
+            database: { title: 'Database Connection', icon: '🗄️', tested: false },
+            tables: { title: 'Database Tables', icon: '📊', tested: false },
+            data: { title: 'Sample Data', icon: '📦', tested: false }
+        };
+        
+        let allPassed = true;
+        const nextSteps = [];
+        
+        async function runChecks() {
+            const container = document.getElementById('checks');
+            container.innerHTML = '';
+            
+            // Check 1: PHP Server
+            await checkPHPServer();
+            
+            // Check 2: API Endpoint
+            await checkAPI();
+            
+            // Check 3: Database Connection
+            await checkDatabase();
+            
+            // Show results
+            showResults();
+        }
+        
+        async function checkPHPServer() {
+            try {
+                const response = await fetch('api.php?action=ping', { 
+                    method: 'GET',
+                    cache: 'no-cache'
+                });
+                
+                if (response.ok) {
+                    addCheck('php', 'success', 'PHP server is running correctly');
+                } else {
+                    addCheck('php', 'error', `Server returned error: ${response.status}`);
+                    allPassed = false;
+                    nextSteps.push('Ensure Apache is running in XAMPP Control Panel');
+                }
+            } catch (error) {
+                addCheck('php', 'error', 'Cannot connect to server. Is XAMPP running?');
+                allPassed = false;
+                nextSteps.push('Start Apache in XAMPP Control Panel');
+            }
+        }
+        
+        async function checkAPI() {
+            try {
+                const response = await fetch('api.php?action=ping');
+                const data = await response.json();
+                
+                if (data.status === 'ok') {
+                    addCheck('api', 'success', `API is working (Version ${data.version})`);
+                } else {
+                    addCheck('api', 'warning', 'API responded but with unexpected format');
+                }
+            } catch (error) {
+                addCheck('api', 'error', 'API endpoint not responding correctly');
+                allPassed = false;
+                nextSteps.push('Check api.php file exists and has no syntax errors');
+            }
+        }
+        
+        async function checkDatabase() {
+            try {
+                const response = await fetch('api.php?action=getCategories');
+                const data = await response.json();
+                
+                if (data.error) {
+                    if (data.error.includes('Connection failed') || data.error.includes('connect')) {
+                        addCheck('database', 'error', 'Cannot connect to MySQL database');
+                        allPassed = false;
+                        nextSteps.push('Start MySQL in XAMPP Control Panel');
+                        nextSteps.push('Verify database credentials in api.php (lines 20-23)');
+                    } else if (data.error.includes('Table') || data.error.includes('database')) {
+                        addCheck('database', 'warning', 'Database exists but tables are missing');
+                        allPassed = false;
+                        nextSteps.push('Import schema.sql into the it_inventory database');
+                        nextSteps.push('Use phpMyAdmin or: mysql -u root -p it_inventory < schema.sql');
+                        
+                        addCheck('tables', 'error', 'Database tables not found');
+                        addCheck('data', 'error', 'Sample data not loaded');
+                    } else {
+                        addCheck('database', 'error', `Database error: ${data.error}`);
+                        allPassed = false;
+                    }
+                } else if (data.categories && data.categories.length > 0) {
+                    addCheck('database', 'success', 'Database connection successful');
+                    addCheck('tables', 'success', `Found ${data.categories.length} categories`);
+                    addCheck('data', 'success', 'Sample data loaded correctly');
+                } else {
+                    addCheck('database', 'warning', 'Database connected but no data found');
+                    nextSteps.push('Import schema.sql to load sample data');
+                }
+            } catch (error) {
+                addCheck('database', 'error', 'Error checking database: ' + error.message);
+                allPassed = false;
+                nextSteps.push('Check MySQL is running in XAMPP');
+                nextSteps.push('Create database "it_inventory" in phpMyAdmin');
+            }
+        }
+        
+        function addCheck(key, status, message) {
+            const check = checks[key];
+            const container = document.getElementById('checks');
+            
+            const statusIcons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️'
+            };
+            
+            const html = `
+                <div class="check-item ${status}">
+                    <div class="check-icon">${check.icon}</div>
+                    <div class="check-content">
+                        <div class="check-title">${check.title}</div>
+                        <div class="check-message">${statusIcons[status]} ${message}</div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML += html;
+            check.tested = true;
+        }
+        
+        function showResults() {
+            const actionsDiv = document.getElementById('actions');
+            const nextStepsDiv = document.getElementById('nextSteps');
+            const stepsList = document.getElementById('stepsList');
+            
+            if (allPassed) {
+                actionsDiv.style.display = 'flex';
+                nextStepsDiv.style.display = 'block';
+                stepsList.innerHTML = `
+                    <li>Click <strong>"Open Dashboard"</strong> to start using the system</li>
+                    <li>Login as <code>Kuya Dante</code></li>
+                    <li>Try searching for items or students</li>
+                    <li>Add a new equipment item</li>
+                    <li>Review the <code>README.md</code> for full documentation</li>
+                `;
+            } else {
+                nextStepsDiv.style.display = 'block';
+                stepsList.innerHTML = nextSteps.map(step => `<li>${step}</li>`).join('');
+                
+                // Still show some actions
+                actionsDiv.style.display = 'flex';
+            }
+        }
+        
+        // Run checks on page load
+        setTimeout(runChecks, 500);
+    </script>
+</body>
+</html>
