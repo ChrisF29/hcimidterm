@@ -17,7 +17,8 @@ const AppState = {
     selectedAssets: [], // For batch operations
     isBatchMode: false,
     currentFilter: 'all',
-    searchQuery: ''
+    searchQuery: '',
+    currentLab: 'Room 209' // Current laboratory view
 };
 
 // API Base URL (adjust for your environment)
@@ -65,10 +66,12 @@ function attachEventListeners() {
     document.getElementById('btnViewOverdue')?.addEventListener('click', showOverdueModal);
     document.getElementById('btnRefresh')?.addEventListener('click', refreshDashboard);
     
-    // Tab switching
+    // Tab switching (form tabs)
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', handleTabSwitch);
     });
+    
+    // Lab switching (floor plan labs) - handled by onclick in HTML
     
     // Form submission
     document.getElementById('itemForm')?.addEventListener('submit', handleFormSubmit);
@@ -98,226 +101,279 @@ async function loadInitialData() {
         populateFormDropdowns();
         
         console.log('✅ Data loaded successfully');
+        console.log('📊 Assets:', AppState.assets.length);
+        console.log('📍 Locations:', AppState.locations.length);
+        console.log('🏢 Current Lab:', AppState.currentLab);
     } catch (error) {
         console.error('❌ Error loading data:', error);
-        showAlert('Error loading data. Please refresh the page.', 'error');
+        showAlert('Error loading data: ' + error.message, 'error');
     } finally {
         showLoading(false);
     }
 }
 
-// Mock data loading (replace with actual API calls)
-function loadCategories() {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            AppState.categories = [
-                { id: 1, name: 'Desktop PC', icon: '🖥️' },
-                { id: 2, name: 'Monitor', icon: '🖥️' },
-                { id: 3, name: 'Keyboard', icon: '⌨️' },
-                { id: 4, name: 'Mouse', icon: '🖱️' },
-                { id: 5, name: 'Printer', icon: '🖨️' },
-                { id: 6, name: 'Network Cable', icon: '🔌' },
-                { id: 7, name: 'Headset', icon: '🎧' }
-            ];
-            resolve();
-        }, 100);
-    });
+// API data loading functions
+async function loadCategories() {
+    try {
+        const response = await fetch(`${API_BASE_URL}?action=getCategories`);
+        const data = await response.json();
+        if (data.categories) {
+            AppState.categories = data.categories.map(cat => ({
+                id: parseInt(cat.id),
+                name: cat.name,
+                icon: cat.icon
+            }));
+        }
+        console.log('📦 Categories loaded:', AppState.categories.length);
+    } catch (error) {
+        console.error('Error loading categories:', error);
+        throw error;
+    }
 }
 
-function loadLocations() {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            AppState.locations = [];
-            // Generate locations for Lab A, 3 rows, 5 positions each
-            for (let row = 1; row <= 3; row++) {
-                for (let pos = 1; pos <= 5; pos++) {
-                    AppState.locations.push({
-                        id: (row - 1) * 5 + pos,
-                        lab: 'Lab A',
-                        row: row,
-                        position: pos
-                    });
-                }
-            }
-            resolve();
-        }, 100);
-    });
+async function loadLocations() {
+    try {
+        const response = await fetch(`${API_BASE_URL}?action=getLocations`);
+        const data = await response.json();
+        if (data.locations) {
+            AppState.locations = data.locations.map(loc => ({
+                id: parseInt(loc.id),
+                lab: loc.lab,
+                row: parseInt(loc.row),
+                position: parseInt(loc.position)
+            }));
+        }
+        console.log('📍 Locations loaded:', AppState.locations.length);
+    } catch (error) {
+        console.error('Error loading locations:', error);
+        throw error;
+    }
 }
 
-function loadAssets() {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            AppState.assets = [
-                {
-                    id: 1,
-                    serialNumber: 'SN-PC-001',
-                    name: 'Desktop PC #1',
-                    categoryId: 1,
-                    locationId: 1,
-                    status: 'good',
-                    brand: 'Dell',
-                    model: 'Optiplex 7090',
-                    mac: '00:1B:44:11:3A:B7',
-                    ip: '192.168.1.101',
-                    specs: 'Intel i7, 16GB RAM, 512GB SSD'
-                },
-                {
-                    id: 2,
-                    serialNumber: 'SN-PC-002',
-                    name: 'Desktop PC #2',
-                    categoryId: 1,
-                    locationId: 2,
-                    status: 'warning',
-                    brand: 'HP',
-                    model: 'ProDesk 600',
-                    mac: '00:1B:44:11:3A:B8',
-                    ip: '192.168.1.102',
-                    specs: 'Intel i5, 8GB RAM, 256GB SSD'
-                },
-                {
-                    id: 3,
-                    serialNumber: 'SN-PC-003',
-                    name: 'Desktop PC #3',
-                    categoryId: 1,
-                    locationId: 3,
-                    status: 'good',
-                    brand: 'Dell',
-                    model: 'Optiplex 7090',
-                    mac: '00:1B:44:11:3A:B9',
-                    ip: '192.168.1.103',
-                    specs: 'Intel i7, 16GB RAM, 512GB SSD'
-                },
-                {
-                    id: 4,
-                    serialNumber: 'SN-PC-004',
-                    name: 'Desktop PC #4',
-                    categoryId: 1,
-                    locationId: 6,
-                    status: 'borrowed',
-                    brand: 'Dell',
-                    model: 'Optiplex 7090',
-                    mac: '00:1B:44:11:3A:BA',
-                    ip: '192.168.1.104',
-                    specs: 'Intel i7, 16GB RAM, 512GB SSD'
-                },
-                {
-                    id: 5,
-                    serialNumber: 'SN-MON-001',
-                    name: 'Monitor #1',
-                    categoryId: 2,
-                    locationId: 1,
-                    status: 'good',
-                    brand: 'Samsung',
-                    model: 'S24R350',
-                    specs: '24-inch, 1920x1080, IPS'
-                },
-                {
-                    id: 6,
-                    serialNumber: 'SN-MON-002',
-                    name: 'Monitor #2',
-                    categoryId: 2,
-                    locationId: 2,
-                    status: 'defective',
-                    brand: 'LG',
-                    model: '24MK430H',
-                    specs: '24-inch, 1920x1080, TN Panel'
-                }
-            ];
-            resolve();
-        }, 100);
-    });
+async function loadAssets() {
+    try {
+        const response = await fetch(`${API_BASE_URL}?action=getAssets`);
+        const data = await response.json();
+        if (data.assets) {
+            AppState.assets = data.assets.map(asset => ({
+                id: parseInt(asset.id),
+                serialNumber: asset.serialNumber,
+                name: asset.name,
+                categoryId: parseInt(asset.categoryId),
+                locationId: asset.locationId ? parseInt(asset.locationId) : null,
+                status: asset.status,
+                brand: asset.brand,
+                model: asset.model,
+                mac: asset.mac,
+                ip: asset.ip,
+                specs: asset.specs,
+                isConsumable: asset.isConsumable,
+                quantity: parseInt(asset.quantity) || 1,
+                minStock: parseInt(asset.minStock) || 5
+            }));
+        }
+        console.log('🖥️ Assets loaded:', AppState.assets.length);
+    } catch (error) {
+        console.error('Error loading assets:', error);
+        throw error;
+    }
 }
 
-function loadStudents() {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            AppState.students = [
-                { id: 1, name: 'Juan Dela Cruz', number: '2024-001' },
-                { id: 2, name: 'Maria Santos', number: '2024-002' },
-                { id: 3, name: 'Pedro Reyes', number: '2024-003' }
-            ];
-            resolve();
-        }, 100);
-    });
+async function loadStudents() {
+    try {
+        const response = await fetch(`${API_BASE_URL}?action=getStudents`);
+        const data = await response.json();
+        if (data.students) {
+            AppState.students = data.students.map(student => ({
+                id: parseInt(student.id),
+                name: student.name,
+                number: student.number,
+                email: student.email,
+                department: student.department
+            }));
+        }
+        console.log('👨‍🎓 Students loaded:', AppState.students.length);
+    } catch (error) {
+        console.error('Error loading students:', error);
+        throw error;
+    }
 }
 
-function loadTransactions() {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            AppState.transactions = [
-                {
-                    id: 1,
-                    assetId: 4,
-                    studentId: 1,
-                    type: 'borrow',
-                    date: '2026-02-10',
-                    expectedReturn: '2026-02-17',
-                    status: 'active'
-                }
-            ];
-            resolve();
-        }, 100);
-    });
+async function loadTransactions() {
+    try {
+        const response = await fetch(`${API_BASE_URL}?action=getTransactions`);
+        const data = await response.json();
+        if (data.transactions) {
+            AppState.transactions = data.transactions.map(trans => ({
+                id: parseInt(trans.id),
+                assetId: parseInt(trans.assetId),
+                studentId: parseInt(trans.studentId),
+                type: trans.type,
+                date: trans.date,
+                expectedReturn: trans.expectedReturn,
+                actualReturn: trans.actualReturn,
+                status: trans.status
+            }));
+        }
+        console.log('📋 Transactions loaded:', AppState.transactions.length);
+    } catch (error) {
+        console.error('Error loading transactions:', error);
+        throw error;
+    }
 }
 
-function loadRepairLogs() {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            AppState.repairLogs = [
-                {
-                    id: 1,
-                    assetId: 2,
-                    type: 'repair',
-                    description: 'Random reboots under load',
-                    action: 'Replaced thermal paste, cleaned CPU fan',
-                    date: '2026-02-01',
-                    status: 'completed'
-                },
-                {
-                    id: 2,
-                    assetId: 6,
-                    type: 'defect',
-                    description: 'Display flickering, no backlight',
-                    action: 'Backlight inverter faulty - pending replacement',
-                    date: '2026-02-12',
-                    status: 'pending'
-                }
-            ];
-            resolve();
-        }, 100);
-    });
+async function loadRepairLogs() {
+    try {
+        const response = await fetch(`${API_BASE_URL}?action=getRepairLogs`);
+        const data = await response.json();
+        if (data.repairLogs) {
+            AppState.repairLogs = data.repairLogs.map(log => ({
+                id: parseInt(log.id),
+                assetId: parseInt(log.assetId),
+                type: log.type,
+                description: log.description,
+                action: log.action,
+                date: log.date,
+                status: log.status,
+                cost: log.cost,
+                technician: log.technician
+            }));
+        }
+        console.log('🔧 Repair logs loaded:', AppState.repairLogs.length);
+    } catch (error) {
+        console.error('Error loading repair logs:', error);
+        throw error;
+    }
 }
 
 // ============================================
 // Floor Plan Rendering
 // ============================================
 function renderFloorPlan() {
-    const rows = [1, 2, 3];
-    
-    rows.forEach(rowNum => {
-        const rowContainer = document.getElementById(`row${rowNum}`);
-        if (!rowContainer) return;
+    try {
+        const gridContainer = document.getElementById('floorPlanGrid');
+        if (!gridContainer) {
+            console.warn('Floor plan grid container not found');
+            return;
+        }
         
-        rowContainer.innerHTML = '';
+        gridContainer.innerHTML = '';
         
-        // Get assets for this row
-        const rowAssets = AppState.assets.filter(asset => {
-            const location = AppState.locations.find(loc => loc.id === asset.locationId);
-            return location && location.row === rowNum;
-        });
+        // Determine number of rows based on current lab (5 rows, 8 PCs per row, 2 columns of 4)
+        const maxRows = 5;
+        const positionsPerColumn = 4;
         
-        // Sort by position
-        rowAssets.sort((a, b) => {
-            const locA = AppState.locations.find(loc => loc.id === a.locationId);
-            const locB = AppState.locations.find(loc => loc.id === b.locationId);
-            return (locA?.position || 0) - (locB?.position || 0);
-        });
+        // Create rows dynamically
+        for (let rowNum = 1; rowNum <= maxRows; rowNum++) {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'floor-row';
+            rowDiv.dataset.row = rowNum;
+            
+            // Row label
+            const rowLabel = document.createElement('div');
+            rowLabel.className = 'row-label';
+            rowLabel.textContent = `Row ${rowNum}`;
+            rowDiv.appendChild(rowLabel);
+            
+            // Row items container
+            const rowItems = document.createElement('div');
+            rowItems.className = 'row-items';
+            rowItems.id = `${AppState.currentLab.replace(' ', '')}-row${rowNum}`;
+            
+            // Get assets for this row in current lab
+            const rowAssets = AppState.assets.filter(asset => {
+                const location = AppState.locations.find(loc => loc.id === asset.locationId);
+                return location && location.lab === AppState.currentLab && location.row === rowNum;
+            });
+            
+            // Sort by position
+            rowAssets.sort((a, b) => {
+                const locA = AppState.locations.find(loc => loc.id === a.locationId);
+                const locB = AppState.locations.find(loc => loc.id === b.locationId);
+                return (locA?.position || 0) - (locB?.position || 0);
+            });
+            
+            // Add assets to row with aisle separator between columns
+            rowAssets.forEach((asset, index) => {
+                // Insert aisle separator between column 1 (positions 1-4) and column 2 (positions 5-8)
+                if (index === positionsPerColumn) {
+                    const aisle = document.createElement('div');
+                    aisle.className = 'row-aisle';
+                    rowItems.appendChild(aisle);
+                }
+                rowItems.appendChild(createFloorItem(asset));
+            });
+            
+            rowDiv.appendChild(rowItems);
+            gridContainer.appendChild(rowDiv);
+        }
         
-        rowAssets.forEach(asset => {
-            rowContainer.appendChild(createFloorItem(asset));
-        });
-    });
+        // Update lab counts
+        updateLabCounts();
+    } catch (error) {
+        console.error('Error rendering floor plan:', error);
+        throw error;
+    }
 }
+
+// ============================================
+// Lab Switching Functions
+// ============================================
+
+function switchLab(labName) {
+    AppState.currentLab = labName;
+    
+    // Update tab active states
+    const tabs = document.querySelectorAll('.lab-tab');
+    tabs.forEach(tab => {
+        if (tab.textContent.includes(labName)) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+    
+    // Update current lab display
+    const currentLabName = document.getElementById('currentLabName');
+    if (currentLabName) {
+        currentLabName.textContent = labName;
+    }
+    
+    // Re-render floor plan for new lab
+    renderFloorPlan();
+}
+
+function updateLabCounts() {
+    // Count assets in each lab
+    let count209 = 0;
+    let count210 = 0;
+    
+    AppState.assets.forEach(asset => {
+        const location = AppState.locations.find(loc => loc.id === asset.locationId);
+        if (location) {
+            if (location.lab === 'Room 209') {
+                count209++;
+            } else if (location.lab === 'Room 210') {
+                count210++;
+            }
+        }
+    });
+    
+    // Update count displays
+    const count209Element = document.getElementById('count209');
+    const count210Element = document.getElementById('count210');
+    
+    if (count209Element) {
+        count209Element.textContent = `${count209} items`;
+    }
+    if (count210Element) {
+        count210Element.textContent = `${count210} items`;
+    }
+}
+
+// ============================================
+// Floor Item Creation
+// ============================================
 
 function createFloorItem(asset) {
     const div = document.createElement('div');

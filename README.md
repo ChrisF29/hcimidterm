@@ -22,7 +22,9 @@ A comprehensive web-based inventory management system optimized for tablet use, 
 ### 🎯 Core Functionality
 
 1. **Visual Floor Plan**
-   - Interactive map showing physical desk arrangement (Lab A, Rows 1-3)
+   - Interactive map for 2 laboratories (Room 209 and Room 210)
+   - Each lab: 5 rows × 8 positions (2 columns of 4) = 40 PCs
+   - Tab switching between laboratories
    - Color-coded status indicators:
      - ✅ Good (Green)
      - ⚠️ Warning (Yellow)
@@ -99,6 +101,7 @@ C:\xampp\htdocs\hcimidterm\
 ├── app.js              (Frontend logic)
 ├── api.php             (Backend API)
 ├── schema.sql          (Database schema)
+├── setup-check.html    (Installation checker)
 └── README.md           (This file)
 ```
 
@@ -152,7 +155,7 @@ The system includes 6 main tables:
 | Table | Purpose |
 |-------|---------|
 | `categories` | Equipment categories (PC, Monitor, Mouse, etc.) |
-| `locations` | Physical locations (Lab A, Rows 1-3) |
+| `locations` | Physical locations (Room 209 & 210, 5 rows × 8 positions each) |
 | `students` | Student/borrower information |
 | `assets` | Main inventory table for all equipment |
 | `transactions` | Borrowing and return history |
@@ -162,10 +165,12 @@ The system includes 6 main tables:
 
 The schema includes sample data:
 - 10 equipment categories
-- 15 locations (Lab A: 3 rows × 5 positions)
+- 80 locations (Room 209: 5 rows × 8 positions = 40, Room 210: 5 rows × 8 positions = 40)
 - 3 sample students
-- 6 sample assets
+- 81 sample assets (40 PCs in Room 209, 40 PCs in Room 210, 1 consumable item)
 - Sample transactions and repair logs
+  - 1 borrowed PC (Room 210)
+  - 2 defective PCs with repair logs
 
 ### Useful Views
 
@@ -489,7 +494,7 @@ After installation, test these features:
 Potential features for future versions:
 
 1. **QR Code Scanning** - Quick asset lookup via QR codes
-2. **Multiple Labs** - Support for Lab B, Lab C, etc.
+2. **Additional Labs** - Support for Lab C, D, etc. (currently supports 2 labs)
 3. **Email Notifications** - Automatic reminders for overdue items
 4. **Advanced Reports** - PDF exports, asset utilization reports
 5. **User Roles** - Admin vs. Regular custodian permissions

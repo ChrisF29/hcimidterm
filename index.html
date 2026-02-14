@@ -14,7 +14,7 @@
         <header class="app-header">
             <div class="header-left">
                 <h1>🛠️ IT Equipment Inventory</h1>
-                <p class="subtitle">Lab A - Equipment Health Dashboard</p>
+                <p class="subtitle">Room 209 & 210 - Equipment Health Dashboard</p>
             </div>
             <div class="header-right">
                 <div class="user-info">
@@ -93,36 +93,25 @@
 
                 <!-- Floor Plan Grid -->
                 <div class="floor-plan-container" id="floorPlanContainer">
-                    <!-- Lab Name Header -->
-                    <div class="lab-header">
-                        <h3>Lab A</h3>
+                    <!-- Lab Tabs -->
+                    <div class="lab-tabs">
+                        <button class="lab-tab active" data-lab="Room 209" onclick="switchLab('Room 209')">
+                            🏢 Room 209 <span class="lab-count" id="count209">40 PCs</span>
+                        </button>
+                        <button class="lab-tab" data-lab="Room 210" onclick="switchLab('Room 210')">
+                            🏢 Room 210 <span class="lab-count" id="count210">40 PCs</span>
+                        </button>
+                    </div>
+
+                    <!-- Current Lab Display -->
+                    <div class="current-lab-display">
+                        <h3 id="currentLabName">Room 209</h3>
+                        <p class="lab-subtitle" id="currentLabSubtitle">5 Rows × 8 Positions</p>
                     </div>
 
                     <!-- Rows will be dynamically generated -->
                     <div class="floor-plan-grid" id="floorPlanGrid">
-                        <!-- Row 1 -->
-                        <div class="floor-row" data-row="1">
-                            <div class="row-label">Row 1</div>
-                            <div class="row-items" id="row1">
-                                <!-- Items dynamically loaded -->
-                            </div>
-                        </div>
-
-                        <!-- Row 2 -->
-                        <div class="floor-row" data-row="2">
-                            <div class="row-label">Row 2</div>
-                            <div class="row-items" id="row2">
-                                <!-- Items dynamically loaded -->
-                            </div>
-                        </div>
-
-                        <!-- Row 3 -->
-                        <div class="floor-row" data-row="3">
-                            <div class="row-label">Row 3</div>
-                            <div class="row-items" id="row3">
-                                <!-- Items dynamically loaded -->
-                            </div>
-                        </div>
+                        <!-- Dynamically generated rows for current lab -->
                     </div>
                 </div>
 

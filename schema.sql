@@ -180,26 +180,21 @@ INSERT INTO categories (category_name, icon) VALUES
 ('External HDD', '💾'),
 ('Power Supply', '⚡');
 
--- Insert Locations (Lab A: 3 Rows x 5 Positions)
+-- Insert Locations (Room 209: 5 Rows x 8 Positions = 40 PCs, 2 columns of 4)
+-- Insert Locations (Room 210: 5 Rows x 8 Positions = 40 PCs, 2 columns of 4)
 INSERT INTO locations (lab_name, row_number, position_number, coordinates_x, coordinates_y) VALUES
--- Row 1
-('Lab A', 1, 1, 100, 100),
-('Lab A', 1, 2, 200, 100),
-('Lab A', 1, 3, 300, 100),
-('Lab A', 1, 4, 400, 100),
-('Lab A', 1, 5, 500, 100),
--- Row 2
-('Lab A', 2, 1, 100, 250),
-('Lab A', 2, 2, 200, 250),
-('Lab A', 2, 3, 300, 250),
-('Lab A', 2, 4, 400, 250),
-('Lab A', 2, 5, 500, 250),
--- Row 3
-('Lab A', 3, 1, 100, 400),
-('Lab A', 3, 2, 200, 400),
-('Lab A', 3, 3, 300, 400),
-('Lab A', 3, 4, 400, 400),
-('Lab A', 3, 5, 500, 400);
+-- Room 209 (IDs 1-40)
+('Room 209', 1, 1, 100, 100), ('Room 209', 1, 2, 200, 100), ('Room 209', 1, 3, 300, 100), ('Room 209', 1, 4, 400, 100), ('Room 209', 1, 5, 550, 100), ('Room 209', 1, 6, 650, 100), ('Room 209', 1, 7, 750, 100), ('Room 209', 1, 8, 850, 100),
+('Room 209', 2, 1, 100, 200), ('Room 209', 2, 2, 200, 200), ('Room 209', 2, 3, 300, 200), ('Room 209', 2, 4, 400, 200), ('Room 209', 2, 5, 550, 200), ('Room 209', 2, 6, 650, 200), ('Room 209', 2, 7, 750, 200), ('Room 209', 2, 8, 850, 200),
+('Room 209', 3, 1, 100, 300), ('Room 209', 3, 2, 200, 300), ('Room 209', 3, 3, 300, 300), ('Room 209', 3, 4, 400, 300), ('Room 209', 3, 5, 550, 300), ('Room 209', 3, 6, 650, 300), ('Room 209', 3, 7, 750, 300), ('Room 209', 3, 8, 850, 300),
+('Room 209', 4, 1, 100, 400), ('Room 209', 4, 2, 200, 400), ('Room 209', 4, 3, 300, 400), ('Room 209', 4, 4, 400, 400), ('Room 209', 4, 5, 550, 400), ('Room 209', 4, 6, 650, 400), ('Room 209', 4, 7, 750, 400), ('Room 209', 4, 8, 850, 400),
+('Room 209', 5, 1, 100, 500), ('Room 209', 5, 2, 200, 500), ('Room 209', 5, 3, 300, 500), ('Room 209', 5, 4, 400, 500), ('Room 209', 5, 5, 550, 500), ('Room 209', 5, 6, 650, 500), ('Room 209', 5, 7, 750, 500), ('Room 209', 5, 8, 850, 500),
+-- Room 210 (IDs 41-80)
+('Room 210', 1, 1, 100, 100), ('Room 210', 1, 2, 200, 100), ('Room 210', 1, 3, 300, 100), ('Room 210', 1, 4, 400, 100), ('Room 210', 1, 5, 550, 100), ('Room 210', 1, 6, 650, 100), ('Room 210', 1, 7, 750, 100), ('Room 210', 1, 8, 850, 100),
+('Room 210', 2, 1, 100, 200), ('Room 210', 2, 2, 200, 200), ('Room 210', 2, 3, 300, 200), ('Room 210', 2, 4, 400, 200), ('Room 210', 2, 5, 550, 200), ('Room 210', 2, 6, 650, 200), ('Room 210', 2, 7, 750, 200), ('Room 210', 2, 8, 850, 200),
+('Room 210', 3, 1, 100, 300), ('Room 210', 3, 2, 200, 300), ('Room 210', 3, 3, 300, 300), ('Room 210', 3, 4, 400, 300), ('Room 210', 3, 5, 550, 300), ('Room 210', 3, 6, 650, 300), ('Room 210', 3, 7, 750, 300), ('Room 210', 3, 8, 850, 300),
+('Room 210', 4, 1, 100, 400), ('Room 210', 4, 2, 200, 400), ('Room 210', 4, 3, 300, 400), ('Room 210', 4, 4, 400, 400), ('Room 210', 4, 5, 550, 400), ('Room 210', 4, 6, 650, 400), ('Room 210', 4, 7, 750, 400), ('Room 210', 4, 8, 850, 400),
+('Room 210', 5, 1, 100, 500), ('Room 210', 5, 2, 200, 500), ('Room 210', 5, 3, 300, 500), ('Room 210', 5, 4, 400, 500), ('Room 210', 5, 5, 550, 500), ('Room 210', 5, 6, 650, 500), ('Room 210', 5, 7, 750, 500), ('Room 210', 5, 8, 850, 500);
 
 -- Insert sample students
 INSERT INTO students (student_name, student_number, email, department) VALUES
@@ -207,30 +202,113 @@ INSERT INTO students (student_name, student_number, email, department) VALUES
 ('Maria Santos', '2024-002', 'maria.santos@university.edu', 'Information Technology'),
 ('Pedro Reyes', '2024-003', 'pedro.reyes@university.edu', 'Computer Engineering');
 
--- Insert sample assets
+-- Insert sample assets for both Room 209 and Room 210 (40 PCs each)
 INSERT INTO assets (serial_number, asset_name, category_id, location_id, status, brand, model, mac_address, ip_address, specifications) VALUES
-('SN-PC-001', 'Desktop PC #1', 1, 1, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:B7', '192.168.1.101', 'Intel i7, 16GB RAM, 512GB SSD'),
-('SN-PC-002', 'Desktop PC #2', 1, 2, 'warning', 'HP', 'ProDesk 600', '00:1B:44:11:3A:B8', '192.168.1.102', 'Intel i5, 8GB RAM, 256GB SSD'),
-('SN-PC-003', 'Desktop PC #3', 1, 3, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:B9', '192.168.1.103', 'Intel i7, 16GB RAM, 512GB SSD'),
-('SN-MON-001', 'Monitor #1', 2, 1, 'good', 'Samsung', 'S24R350', NULL, NULL, '24-inch, 1920x1080, IPS'),
-('SN-MON-002', 'Monitor #2', 2, 2, 'defective', 'LG', '24MK430H', NULL, NULL, '24-inch, 1920x1080, TN Panel'),
+-- Room 209 Assets (40 PCs - 5 Rows x 8 Positions - Location IDs 1-40)
+('SN-PC-209-001', 'Desktop PC 209-R1P1', 1, 1, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:01', '192.168.209.1', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-002', 'Desktop PC 209-R1P2', 1, 2, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:02', '192.168.209.2', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-003', 'Desktop PC 209-R1P3', 1, 3, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3A:03', '192.168.209.3', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-209-004', 'Desktop PC 209-R1P4', 1, 4, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:04', '192.168.209.4', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-005', 'Desktop PC 209-R1P5', 1, 5, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3A:05', '192.168.209.5', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-006', 'Desktop PC 209-R1P6', 1, 6, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:06', '192.168.209.6', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-007', 'Desktop PC 209-R1P7', 1, 7, 'warning', 'HP', 'ProDesk 600', '00:1B:44:11:3A:07', '192.168.209.7', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-209-008', 'Desktop PC 209-R1P8', 1, 8, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3A:08', '192.168.209.8', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-009', 'Desktop PC 209-R2P1', 1, 9, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:09', '192.168.209.9', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-010', 'Desktop PC 209-R2P2', 1, 10, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3A:10', '192.168.209.10', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-011', 'Desktop PC 209-R2P3', 1, 11, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:11', '192.168.209.11', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-012', 'Desktop PC 209-R2P4', 1, 12, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3A:12', '192.168.209.12', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-013', 'Desktop PC 209-R2P5', 1, 13, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3A:13', '192.168.209.13', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-209-014', 'Desktop PC 209-R2P6', 1, 14, 'defective', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:14', '192.168.209.14', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-015', 'Desktop PC 209-R2P7', 1, 15, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3A:15', '192.168.209.15', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-016', 'Desktop PC 209-R2P8', 1, 16, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:16', '192.168.209.16', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-017', 'Desktop PC 209-R3P1', 1, 17, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3A:17', '192.168.209.17', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-018', 'Desktop PC 209-R3P2', 1, 18, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3A:18', '192.168.209.18', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-209-019', 'Desktop PC 209-R3P3', 1, 19, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:19', '192.168.209.19', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-020', 'Desktop PC 209-R3P4', 1, 20, 'warning', 'HP', 'EliteDesk 800', '00:1B:44:11:3A:20', '192.168.209.20', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-021', 'Desktop PC 209-R3P5', 1, 21, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:21', '192.168.209.21', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-022', 'Desktop PC 209-R3P6', 1, 22, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3A:22', '192.168.209.22', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-023', 'Desktop PC 209-R3P7', 1, 23, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3A:23', '192.168.209.23', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-209-024', 'Desktop PC 209-R3P8', 1, 24, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:24', '192.168.209.24', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-025', 'Desktop PC 209-R4P1', 1, 25, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3A:25', '192.168.209.25', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-026', 'Desktop PC 209-R4P2', 1, 26, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:26', '192.168.209.26', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-027', 'Desktop PC 209-R4P3', 1, 27, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3A:27', '192.168.209.27', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-028', 'Desktop PC 209-R4P4', 1, 28, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3A:28', '192.168.209.28', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-209-029', 'Desktop PC 209-R4P5', 1, 29, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:29', '192.168.209.29', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-030', 'Desktop PC 209-R4P6', 1, 30, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3A:30', '192.168.209.30', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-031', 'Desktop PC 209-R4P7', 1, 31, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:31', '192.168.209.31', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-032', 'Desktop PC 209-R4P8', 1, 32, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3A:32', '192.168.209.32', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-033', 'Desktop PC 209-R5P1', 1, 33, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3A:33', '192.168.209.33', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-209-034', 'Desktop PC 209-R5P2', 1, 34, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:34', '192.168.209.34', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-035', 'Desktop PC 209-R5P3', 1, 35, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3A:35', '192.168.209.35', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-036', 'Desktop PC 209-R5P4', 1, 36, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:36', '192.168.209.36', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-037', 'Desktop PC 209-R5P5', 1, 37, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3A:37', '192.168.209.37', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-038', 'Desktop PC 209-R5P6', 1, 38, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3A:38', '192.168.209.38', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-209-039', 'Desktop PC 209-R5P7', 1, 39, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3A:39', '192.168.209.39', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-209-040', 'Desktop PC 209-R5P8', 1, 40, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3A:40', '192.168.209.40', 'Intel i7, 16GB RAM, 512GB SSD'),
+-- Room 210 Assets (40 PCs - 5 Rows x 8 Positions - Location IDs 41-80)
+('SN-PC-210-001', 'Desktop PC 210-R1P1', 1, 41, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:01', '192.168.210.1', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-002', 'Desktop PC 210-R1P2', 1, 42, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3B:02', '192.168.210.2', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-003', 'Desktop PC 210-R1P3', 1, 43, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3B:03', '192.168.210.3', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-210-004', 'Desktop PC 210-R1P4', 1, 44, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:04', '192.168.210.4', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-005', 'Desktop PC 210-R1P5', 1, 45, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3B:05', '192.168.210.5', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-210-006', 'Desktop PC 210-R1P6', 1, 46, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:06', '192.168.210.6', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-007', 'Desktop PC 210-R1P7', 1, 47, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3B:07', '192.168.210.7', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-008', 'Desktop PC 210-R1P8', 1, 48, 'warning', 'HP', 'ProDesk 600', '00:1B:44:11:3B:08', '192.168.210.8', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-210-009', 'Desktop PC 210-R2P1', 1, 49, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:09', '192.168.210.9', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-010', 'Desktop PC 210-R2P2', 1, 50, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3B:10', '192.168.210.10', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-011', 'Desktop PC 210-R2P3', 1, 51, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:11', '192.168.210.11', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-012', 'Desktop PC 210-R2P4', 1, 52, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3B:12', '192.168.210.12', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-013', 'Desktop PC 210-R2P5', 1, 53, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3B:13', '192.168.210.13', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-210-014', 'Desktop PC 210-R2P6', 1, 54, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:14', '192.168.210.14', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-015', 'Desktop PC 210-R2P7', 1, 55, 'defective', 'HP', 'EliteDesk 800', '00:1B:44:11:3B:15', '192.168.210.15', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-016', 'Desktop PC 210-R2P8', 1, 56, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:16', '192.168.210.16', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-017', 'Desktop PC 210-R3P1', 1, 57, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3B:17', '192.168.210.17', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-018', 'Desktop PC 210-R3P2', 1, 58, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3B:18', '192.168.210.18', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-210-019', 'Desktop PC 210-R3P3', 1, 59, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:19', '192.168.210.19', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-020', 'Desktop PC 210-R3P4', 1, 60, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3B:20', '192.168.210.20', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-021', 'Desktop PC 210-R3P5', 1, 61, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:21', '192.168.210.21', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-022', 'Desktop PC 210-R3P6', 1, 62, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3B:22', '192.168.210.22', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-023', 'Desktop PC 210-R3P7', 1, 63, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3B:23', '192.168.210.23', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-210-024', 'Desktop PC 210-R3P8', 1, 64, 'borrowed', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:24', '192.168.210.24', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-025', 'Desktop PC 210-R4P1', 1, 65, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3B:25', '192.168.210.25', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-026', 'Desktop PC 210-R4P2', 1, 66, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:26', '192.168.210.26', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-027', 'Desktop PC 210-R4P3', 1, 67, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3B:27', '192.168.210.27', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-028', 'Desktop PC 210-R4P4', 1, 68, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3B:28', '192.168.210.28', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-210-029', 'Desktop PC 210-R4P5', 1, 69, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:29', '192.168.210.29', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-030', 'Desktop PC 210-R4P6', 1, 70, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3B:30', '192.168.210.30', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-031', 'Desktop PC 210-R4P7', 1, 71, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:31', '192.168.210.31', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-032', 'Desktop PC 210-R4P8', 1, 72, 'warning', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3B:32', '192.168.210.32', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-033', 'Desktop PC 210-R5P1', 1, 73, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3B:33', '192.168.210.33', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-210-034', 'Desktop PC 210-R5P2', 1, 74, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:34', '192.168.210.34', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-035', 'Desktop PC 210-R5P3', 1, 75, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3B:35', '192.168.210.35', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-036', 'Desktop PC 210-R5P4', 1, 76, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:36', '192.168.210.36', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-037', 'Desktop PC 210-R5P5', 1, 77, 'good', 'Lenovo', 'ThinkCentre M90', '00:1B:44:11:3B:37', '192.168.210.37', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-038', 'Desktop PC 210-R5P6', 1, 78, 'good', 'HP', 'ProDesk 600', '00:1B:44:11:3B:38', '192.168.210.38', 'Intel i5, 8GB RAM, 256GB SSD'),
+('SN-PC-210-039', 'Desktop PC 210-R5P7', 1, 79, 'good', 'Dell', 'Optiplex 7090', '00:1B:44:11:3B:39', '192.168.210.39', 'Intel i7, 16GB RAM, 512GB SSD'),
+('SN-PC-210-040', 'Desktop PC 210-R5P8', 1, 80, 'good', 'HP', 'EliteDesk 800', '00:1B:44:11:3B:40', '192.168.210.40', 'Intel i7, 16GB RAM, 512GB SSD'),
+-- Consumables (no specific location)
 ('SN-MOUSE-BULK', 'Logitech Mice - Bulk', 4, NULL, 'good', 'Logitech', 'M170', NULL, NULL, 'Wireless Optical Mouse');
 
 -- Update the mouse to be consumable with quantity
 UPDATE assets SET is_consumable = TRUE, quantity = 15, min_stock_threshold = 5 WHERE serial_number = 'SN-MOUSE-BULK';
 
--- Insert a sample transaction (borrowed item)
+-- Insert a sample transaction (borrowed item - Desktop PC 210-R5P4)
 INSERT INTO transactions (asset_id, student_id, transaction_type, expected_return_date, status) VALUES
-(1, 1, 'borrow', DATE_ADD(CURDATE(), INTERVAL 7 DAY), 'active');
+((SELECT asset_id FROM assets WHERE serial_number = 'SN-PC-210-024'), 1, 'borrow', DATE_ADD(CURDATE(), INTERVAL 7 DAY), 'active');
 
 -- Insert sample repair logs
 INSERT INTO repair_logs (asset_id, log_type, issue_description, action_taken, repair_status, technician_name, parts_replaced, cost) VALUES
-(2, 'defect_report', 'Random reboots under load', 'Replaced thermal paste, cleaned CPU fan', 'completed', 'Tech Mike', 'Thermal Paste', 150.00),
-(5, 'defect_report', 'Display flickering, no backlight', 'Backlight inverter faulty - pending replacement', 'pending', 'Tech Mike', NULL, 0.00);
+((SELECT asset_id FROM assets WHERE serial_number = 'SN-PC-209-007'), 'defect_report', 'Random reboots under load', 'Replaced thermal paste, cleaned CPU fan', 'completed', 'Tech Mike', 'Thermal Paste', 150.00),
+((SELECT asset_id FROM assets WHERE serial_number = 'SN-PC-210-015'), 'defect_report', 'Display artifacts, GPU overheating', 'GPU fan faulty - pending replacement', 'pending', 'Tech Mike', NULL, 0.00);
 
 -- ============================================
 -- USEFUL VIEWS
 -- ============================================
+
+-- Drop existing views if they exist
+DROP VIEW IF EXISTS low_stock_items;
+DROP VIEW IF EXISTS currently_borrowed;
+DROP VIEW IF EXISTS asset_health_dashboard;
 
 -- View: Low Stock Alerts
 CREATE VIEW low_stock_items AS
@@ -298,6 +376,10 @@ ORDER BY l.lab_name, l.row_number, l.position_number;
 -- ============================================
 -- STORED PROCEDURES
 -- ============================================
+
+-- Drop existing procedures if they exist
+DROP PROCEDURE IF EXISTS update_overdue_transactions;
+DROP PROCEDURE IF EXISTS get_asset_lifecycle;
 
 DELIMITER //
 
