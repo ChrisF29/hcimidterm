@@ -1062,22 +1062,21 @@ function handleFormSubmit(e) {
         })
         .then(response => response.json())
         .then(data => {
-            // Update the asset in local state
-            const index = AppState.assets.findIndex(a => a.id === assetId);
-            if (index > -1) {
-                AppState.assets[index] = { ...AppState.assets[index], ...formData };
+            if (data.success) {
+                // Close modal first
+                closeModal('modalAddItem');
+                closeDetails();
+                
+                // Reload dashboard data from API to ensure consistency
+                loadDashboardData().then(() => {
+                    showLoading(false);
+                    showAlert('Item updated successfully!', 'success');
+                    console.log('✅ Asset updated:', assetId);
+                });
+            } else {
+                showLoading(false);
+                showAlert('Error updating item: ' + (data.message || 'Unknown error'), 'error');
             }
-            
-            // Close modal
-            closeModal('modalAddItem');
-            
-            // Refresh dashboard
-            closeDetails();
-            renderFloorPlan();
-            showLoading(false);
-            
-            showAlert('Item updated successfully!', 'success');
-            console.log('✅ Asset updated:', assetId);
         })
         .catch(error => {
             console.error('Error updating asset:', error);
@@ -1093,22 +1092,20 @@ function handleFormSubmit(e) {
         })
         .then(response => response.json())
         .then(data => {
-            // Add to local state with the new ID from server
-            const newAsset = {
-                id: data.id || (AppState.assets.length + 1),
-                ...formData
-            };
-            AppState.assets.push(newAsset);
-            
-            // Close modal
-            closeModal('modalAddItem');
-            
-            // Refresh dashboard
-            renderFloorPlan();
-            showLoading(false);
-            
-            showAlert('Item added successfully!', 'success');
-            console.log('✅ New asset added:', newAsset);
+            if (data.success || data.id) {
+                // Close modal first
+                closeModal('modalAddItem');
+                
+                // Reload dashboard data from API to ensure consistency
+                loadDashboardData().then(() => {
+                    showLoading(false);
+                    showAlert('Item added successfully!', 'success');
+                    console.log('✅ New asset added with ID:', data.id);
+                });
+            } else {
+                showLoading(false);
+                showAlert('Error adding item: ' + (data.message || 'Unknown error'), 'error');
+            }
         })
         .catch(error => {
             console.error('Error creating asset:', error);
